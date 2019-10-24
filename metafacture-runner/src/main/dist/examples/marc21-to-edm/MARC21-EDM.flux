@@ -15,5 +15,5 @@ handle-marcxml|
 morph(FLUX_DIR + "MARC21-EDM.xml", *)|
 add-oreaggregation|
 rdf-macros|
-stream-to-xml(roottag="rdf:RDF", recordtag="", namespacefile= FLUX_DIR+"edm-namespaces.properties")|
+encode-xml(roottag="rdf:RDF", recordtag="", namespacefile= FLUX_DIR+"edm-namespaces.properties")|
 write(out);
