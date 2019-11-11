@@ -26,7 +26,7 @@ function main {
     require_vars
     fetch_keyring
     configure_gradle
-    ./gradlew publish
+    ./gradlew publish getStagingProfile closeAndReleaseRepository
     clean_gradle_configuration
     remove_keyring
 }
