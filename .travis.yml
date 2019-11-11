@@ -36,7 +36,7 @@ script:
 
 after_success:
   - ./travis/publish.sh
-  - ./gradlew closeAndReleaseRepository
+  - ./gradlew publish getStagingProfile closeAndReleaseRepository
 
 deploy:
   provider: releases
