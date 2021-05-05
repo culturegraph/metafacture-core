@@ -42,6 +42,7 @@ subprojects {
   apply plugin: 'signing'
   apply plugin: 'maven'
   apply plugin: 'jacoco'
+  apply plugin: 'maven-publish'
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
@@ -174,8 +175,42 @@ gradle.projectsEvaluated {
       }
     }
 
+    //'upload' vs. 'publish, see 
+    //https://medium.com/dot-debug/deploying-artifacts-to-maven-using-gradle-b669acc1b6f8'
+    /*
     task publish {
       dependsOn tasks.uploadArchives
+    }
+    */
+
+    publishing {
+      publications {
+        mavenArtifacts(MavenPublication) {
+          from components.java
+          afterEvaluate {
+            groupId = project.group
+            artifactId = project.name
+          }
+        }
+      }
+
+      repositories {
+        maven {
+          name = 'localEmbedded'
+          // run generated gradle task `./gradlew 
+          // publishMavenArtifactsPublicationToLocalEmbeddedRepository`
+          // to publish all subprojects into the same local embedded repo:
+          url = "file://${rootDir}/build/repo"
+        }
+        maven {
+          name = "GitHubPackages"
+          url = "https://maven.pkg.github.com/metafacture/metafacture-core"
+          credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+          }
+        }
+      }
     }
   }
 }
@@ -248,6 +283,10 @@ def getSnapshotVersion() {
   if (grgit.branch.current().name.startsWith('releases/')) {
     logger.lifecycle('Release branch found')
     return "${extractVersionFromBranch(grgit.branch.current().name)}-SNAPSHOT"
+  }
+  if (grgit.branch.current().name.contains('-rc')) {
+    logger.lifecycle('Release candidate branch found')
+    return "${grgit.branch.current().name}"
   }
   logger.lifecycle('Feature branch found')
   return "feature-${grgit.branch.current().name}-SNAPSHOT"

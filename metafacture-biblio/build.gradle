@@ -21,13 +21,13 @@ dependencies {
   api project(':metafacture-framework')
   implementation project(':metafacture-commons')
   implementation project(':metafacture-flowcontrol')
-  implementation 'org.dspace:oclc-harvester2:0.1.12'
   implementation ('xalan:xalan:2.7.0') {
     exclude group: 'xalan', module: 'serializer'
     exclude group: 'xercesImpl', module: 'xercesImpl'
     exclude group: 'xml-apis', module: 'xml-apis'
   }
   implementation 'log4j:log4j:1.2.12'
+  implementation 'org.slf4j:slf4j-api:1.7.7'
   testImplementation 'junit:junit:4.12'
   testImplementation 'org.mockito:mockito-core:2.5.5'
 }
